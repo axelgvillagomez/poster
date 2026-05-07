@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <title>Reforestación Urbana — AR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=1"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #000; overflow: hidden; font-family: 'Inter', sans-serif; }
+
+    /* Loading screen */
+    #loading {
+      position: fixed; inset: 0;
+      background: linear-gradient(160deg, #071a0a, #0d2b10, #04140a);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.8s ease;
+    }
+    #loading.hidden { opacity: 0; pointer-events: none; }
+
+    .loading-icon {
+      font-size: 64px;
+      animation: pulse 2s ease-in-out infinite;
+      margin-bottom: 24px;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.12); opacity: 0.7; }
+    }
+
+    .loading-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #6dde6d;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+    .loading-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    .loading-bar {
+      width: 200px; height: 2px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .loading-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #2d7a1f, #6dde6d);
+      border-radius: 2px;
+      animation: load 3s ease-in-out forwards;
+    }
+    @keyframes load { from { width: 0% } to { width: 100% } }
+
+    /* Instructions overlay */
+    #instructions {
+      position: fixed;
+      top: 20px; left: 50%;
+      transform: translateX(-50%);
+      background: rgba(7, 26, 10, 0.88);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(92,184,92,0.3);
+      border-radius: 12px;
+      padding: 12px 20px;
+      z-index: 1000;
+      text-align: center;
+      max-width: 90vw;
+      animation: slideDown 0.5s ease 3.5s both;
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    #instructions p {
+      font-size: 12px;
+      color: rgba(180,255,160,0.9);
+      letter-spacing: 0.06em;
+    }
+    #instructions strong {
+      color: #6dde6d;
+      font-weight: 700;
+    }
+
+    /* Found/Lost indicator */
+    #marker-status {
+      position: fixed;
+      bottom: 90px; left: 50%;
+      transform: translateX(-50%);
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      z-index: 1000;
+      transition: all 0.4s ease;
+      opacity: 0;
+    }
+    #marker-status.found {
+      background: rgba(45,122,31,0.9);
+      color: #c8e6c9;
+      border: 1px solid rgba(109,222,109,0.5);
+      opacity: 1;
+    }
+    #marker-status.lost {
+      background: rgba(60,20,10,0.9);
+      color: #ffccbc;
+      border: 1px solid rgba(255,100,60,0.4);
+      opacity: 1;
+    }
+
+    /* Bottom button */
+    .ui-btn {
+      position: fixed;
+      bottom: 24px; left: 50%;
+      transform: translateX(-50%);
+      background: rgba(7,26,10,0.92);
+      color: #6dde6d;
+      border: 1px solid rgba(92,184,92,0.4);
+      padding: 10px 24px;
+      border-radius: 24px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      z-index: 9999;
+      white-space: nowrap;
+      backdrop-filter: blur(10px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading Screen -->
+  <div id="loading">
+    <div class="loading-icon">🌳</div>
+    <p class="loading-title">Reforestación Urbana</p>
+    <p class="loading-sub">Iniciando AR · Cargando marcador</p>
+    <div class="loading-bar">
+      <div class="loading-bar-fill"></div>
+    </div>
+  </div>
+
+  <!-- Instructions -->
+  <div id="instructions">
+    <p>📷 Apunta la cámara al <strong>póster</strong> para activar la experiencia AR</p>
+  </div>
+
+  <!-- Marker Status -->
+  <div id="marker-status">● Buscando póster...</div>
+
+  <!-- View Poster Link -->
+  <a href="poster.html" class="ui-btn" target="_blank">Ver Póster</a>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./js/three.module.min.js",
+        "arnft-threejs": "./js/ARnftThreejs.mjs",
+        "arnft": "./js/ARnft.mjs"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import * as THREE from "three";
+    import arnft from "arnft";
+    const { ARnft } = arnft;
+    import ARnftThreejs from "arnft-threejs";
+    const { SceneRendererTJS, NFTaddTJS } = ARnftThreejs;
+
+    // --- Hide loading after 3.2s ---
+    setTimeout(() => {
+      const el = document.getElementById("loading");
+      if (el) { el.classList.add("hidden"); setTimeout(() => el.remove(), 900); }
+    }, 3200);
+
+    // --- Init ARnft ---
+    ARnft.init(640, 480, [["nft/poster"]], [["poster"]], "config.json", false)
+      .then((nft) => {
+
+        document.addEventListener("containerEvent", function (ev) {
+          const canvas = document.getElementById("canvas");
+          const fov = (0.8 * 180) / Math.PI;
+          const ratio = 640 / 480;
+
+          const config = {
+            renderer: {
+              alpha: true, antialias: true, context: null,
+              precision: "mediump", premultipliedAlpha: true,
+              stencil: true, depth: true, logarithmicDepthBuffer: true,
+            },
+            camera: { fov, ratio, near: 0.01, far: 2000 },
+          };
+
+          const scene3 = new SceneRendererTJS(config, canvas, nft.uuid, true);
+          scene3.initRenderer();
+
+          const nftAdd = new NFTaddTJS(nft.uuid);
+
+          // ====== BUILD 3D SCENE ======
+          const group = new THREE.Group();
+
+          // -- 1. Glowing ground plane (represents earth/soil) --
+          const groundGeo = new THREE.CircleGeometry(100, 64);
+          const groundMat = new THREE.MeshBasicMaterial({
+            color: 0x1b5e20, transparent: true, opacity: 0.5, side: THREE.DoubleSide
+          });
+          const ground = new THREE.Mesh(groundGeo, groundMat);
+          ground.rotation.x = -Math.PI / 2;
+          ground.position.y = -2;
+          group.add(ground);
+
+          // -- 2. Central tree trunk --
+          const trunkGeo = new THREE.CylinderGeometry(4, 7, 60, 10);
+          const trunkMat = new THREE.MeshBasicMaterial({ color: 0x4e342e });
+          const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+          trunk.position.y = 30;
+          group.add(trunk);
+
+          // -- 3. Canopy layers (stacked cones → cartoon tree) --
+          const canopyColors = [0x1b5e20, 0x2e7d32, 0x388e3c, 0x43a047, 0x66bb6a];
+          const canopyData = [
+            { r: 55, h: 50, y: 55 },
+            { r: 48, h: 46, y: 80 },
+            { r: 38, h: 42, y: 102 },
+            { r: 28, h: 36, y: 120 },
+            { r: 18, h: 28, y: 135 },
+          ];
+          canopyData.forEach((d, i) => {
+            const geo = new THREE.ConeGeometry(d.r, d.h, 12);
+            const mat = new THREE.MeshBasicMaterial({ color: canopyColors[i] });
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.y = d.y;
+            group.add(mesh);
+          });
+
+          // -- 4. Floating leaf particles --
+          const leafGeo = new THREE.SphereGeometry(2.5, 6, 6);
+          const leafPositions = [
+            [-70, 80, 10], [75, 90, -5], [-55, 120, -20], [60, 115, 15],
+            [-40, 145, 8], [45, 140, -12], [0, 165, 20], [-25, 70, 30],
+            [30, 75, -25], [-80, 60, -10], [85, 65, 5], [0, 110, -30],
+          ];
+          const leafColors = [0x4caf50, 0x66bb6a, 0x81c784, 0xa5d6a7, 0x2e7d32];
+          leafPositions.forEach((pos, i) => {
+            const mat = new THREE.MeshBasicMaterial({ color: leafColors[i % leafColors.length] });
+            const leaf = new THREE.Mesh(leafGeo, mat);
+            leaf.position.set(...pos);
+            leaf.userData.floatOffset = i * 0.4;
+            group.add(leaf);
+          });
+
+          // -- 5. Seedlings around base --
+          [[-50, -15], [50, -15], [-80, 20], [80, 20], [0, -60]].forEach(([x, z]) => {
+            const sGeo = new THREE.ConeGeometry(5, 14, 6);
+            const sMat = new THREE.MeshBasicMaterial({ color: 0x4caf50 });
+            const s = new THREE.Mesh(sGeo, sMat);
+            s.position.set(x, 5, z);
+            group.add(s);
+            const stGeo = new THREE.CylinderGeometry(1, 1.5, 6, 5);
+            const stMat = new THREE.MeshBasicMaterial({ color: 0x5d4037 });
+            const st = new THREE.Mesh(stGeo, stMat);
+            st.position.set(x, -1, z);
+            group.add(st);
+          });
+
+          // -- 6. Glowing ring (ground halo) --
+          const ringGeo = new THREE.RingGeometry(90, 95, 64);
+          const ringMat = new THREE.MeshBasicMaterial({
+            color: 0x4caf50, side: THREE.DoubleSide, transparent: true, opacity: 0.4
+          });
+          const ring = new THREE.Mesh(ringGeo, ringMat);
+          ring.rotation.x = -Math.PI / 2;
+          ring.position.y = -1;
+          group.add(ring);
+
+          // -- 7. Floating text plane (CO2 info) --
+          const canvas2d = document.createElement("canvas");
+          canvas2d.width = 512; canvas2d.height = 128;
+          const ctx = canvas2d.getContext("2d");
+          ctx.fillStyle = "rgba(7,26,10,0.85)";
+          ctx.roundRect(4, 4, 504, 120, 16);
+          ctx.fill();
+          ctx.strokeStyle = "#5cb85c";
+          ctx.lineWidth = 3;
+          ctx.roundRect(4, 4, 504, 120, 16);
+          ctx.stroke();
+          ctx.fillStyle = "#6dde6d";
+          ctx.font = "bold 28px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText("🌿 Planta un árbol · Salva el planeta", 256, 52);
+          ctx.fillStyle = "rgba(200,230,200,0.8)";
+          ctx.font = "20px Arial";
+          ctx.fillText("1 árbol absorbe 22 kg de CO₂ al año", 256, 90);
+
+          const texLabel = new THREE.CanvasTexture(canvas2d);
+          const labelGeo = new THREE.PlaneGeometry(130, 32);
+          const labelMat = new THREE.MeshBasicMaterial({ map: texLabel, transparent: true, side: THREE.DoubleSide });
+          const label = new THREE.Mesh(labelGeo, labelMat);
+          label.position.set(0, 175, 0);
+          group.add(label);
+
+          // Scale & orient group to sit on marker
+          group.rotation.x = Math.PI;
+          group.scale.setScalar(0.85);
+          group.position.y = 40;
+
+          nftAdd.add(group, "poster", false);
+
+          // ====== ANIMATION LOOP ======
+          let frame = 0;
+          const status = document.getElementById("marker-status");
+
+          const tick = () => {
+            frame++;
+
+            // Animate floating leaves
+            group.children.forEach((child, i) => {
+              if (child.userData.floatOffset !== undefined) {
+                child.position.y += Math.sin(frame * 0.03 + child.userData.floatOffset) * 0.2;
+              }
+            });
+
+            // Gentle tree sway
+            trunk.rotation.z = Math.sin(frame * 0.015) * 0.015;
+
+            // Rotate ground ring
+            ring.rotation.z += 0.005;
+
+            // Label billboard (always faces camera)
+            label.rotation.z = Math.sin(frame * 0.01) * 0.04;
+
+            scene3.draw();
+            window.requestAnimationFrame(tick);
+          };
+          tick();
+
+          // Marker found/lost status
+          window.addEventListener("nftMarkerFound", () => {
+            status.textContent = "✅ Póster detectado";
+            status.className = "found";
+          });
+          window.addEventListener("nftMarkerLost", () => {
+            status.textContent = "🔍 Apunta al póster";
+            status.className = "lost";
+          });
+        });
+      })
+      .catch((err) => console.error("ARnft init error:", err));
+  </script>
+</body>
+</html>

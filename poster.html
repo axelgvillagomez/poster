@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reforestación Urbana — Póster AR</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 794px;
+  height: 1123px;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  background: #0a1a0d;
+}
+
+.poster {
+  width: 794px;
+  height: 1123px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(170deg, #071a0a 0%, #0d2b10 25%, #0a2218 50%, #04140a 100%);
+}
+
+/* Textured background dots */
+.bg-texture {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(80,180,80,0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Top light leak */
+.light-leak {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 300px;
+  background: radial-gradient(ellipse, rgba(100,200,80,0.18) 0%, transparent 70%);
+}
+
+/* Green borders */
+.border-frame {
+  position: absolute;
+  inset: 0;
+  border: 6px solid transparent;
+  background: linear-gradient(#0d2b10, #0d2b10) padding-box,
+              linear-gradient(135deg, #2d7a1f, #5cb85c, #2d7a1f, #8bc34a, #2d7a1f) border-box;
+}
+
+.corner { position: absolute; width: 36px; height: 36px; }
+.corner-tl { top: 14px; left: 14px; border-top: 2px solid #5cb85c; border-left: 2px solid #5cb85c; }
+.corner-tr { top: 14px; right: 14px; border-top: 2px solid #5cb85c; border-right: 2px solid #5cb85c; }
+.corner-bl { bottom: 138px; left: 14px; border-bottom: 2px solid #5cb85c; border-left: 2px solid #5cb85c; }
+.corner-br { bottom: 138px; right: 14px; border-bottom: 2px solid #5cb85c; border-right: 2px solid #5cb85c; }
+
+/* Hero illustration area */
+.illustration {
+  position: absolute;
+  top: 18px;
+  left: 0; right: 0;
+  height: 440px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.illustration svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 40px rgba(60,180,60,0.25));
+}
+
+/* Title block */
+.title-block {
+  position: absolute;
+  top: 435px;
+  left: 0; right: 0;
+  text-align: center;
+  padding: 0 50px;
+}
+
+.eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  color: #5cb85c;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.main-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 68px;
+  font-weight: 900;
+  line-height: 1.0;
+  color: #ffffff;
+  text-shadow: 0 0 80px rgba(100,200,80,0.5);
+  margin-bottom: 6px;
+}
+
+.main-title .green { color: #6dde6d; }
+
+.tagline {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 20px;
+  color: rgba(180,255,160,0.75);
+  letter-spacing: 0.1em;
+  margin-bottom: 18px;
+}
+
+.divider {
+  width: 200px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #5cb85c, transparent);
+  margin: 0 auto 20px;
+}
+
+/* Stats row */
+.stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin: 0 auto;
+  max-width: 560px;
+  border: 1px solid rgba(92,184,92,0.2);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.stat-item {
+  flex: 1;
+  padding: 12px 8px;
+  text-align: center;
+  border-right: 1px solid rgba(92,184,92,0.15);
+}
+.stat-item:last-child { border-right: none; }
+
+.stat-num {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #6dde6d;
+}
+.stat-label {
+  display: block;
+  font-size: 8.5px;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* Body text */
+.body-text {
+  position: absolute;
+  top: 720px;
+  left: 54px; right: 54px;
+  text-align: center;
+}
+
+.body-text p {
+  font-size: 13px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.85;
+  font-weight: 300;
+  letter-spacing: 0.03em;
+}
+
+/* Call to action chips */
+.chips {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.chip {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #6dde6d;
+  border: 1px solid rgba(109,222,109,0.35);
+  border-radius: 20px;
+  padding: 5px 14px;
+  background: rgba(109,222,109,0.05);
+}
+
+/* Separator line before QR */
+.sep-line {
+  position: absolute;
+  bottom: 130px; left: 6px; right: 6px;
+  height: 5px;
+  background: linear-gradient(90deg, #1a5c1a, #5cb85c, #8bc34a, #5cb85c, #1a5c1a);
+}
+
+/* QR Band */
+.qr-band {
+  position: absolute;
+  bottom: 0; left: 6px; right: 6px;
+  height: 130px;
+  background: linear-gradient(135deg, #f0faf0, #e8f5e8);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+}
+
+.qr-text-col { display: flex; flex-direction: column; gap: 4px; }
+
+.qr-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0d2b10;
+  letter-spacing: 0.02em;
+}
+
+.qr-desc {
+  font-size: 10.5px;
+  color: #3a6b3a;
+  line-height: 1.55;
+  max-width: 380px;
+}
+
+.ar-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #0d2b10;
+  color: #6dde6d;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-top: 8px;
+  width: fit-content;
+}
+
+.qr-box-wrap { display: flex; align-items: center; gap: 12px; }
+
+.qr-box {
+  width: 88px;
+  height: 88px;
+  border: 2.5px solid #0d2b10;
+  border-radius: 6px;
+  background: white;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Fake QR pattern using CSS */
+.qr-box::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  background-image:
+    linear-gradient(#0d2b10 1px, transparent 1px),
+    linear-gradient(90deg, #0d2b10 1px, transparent 1px);
+  background-size: 7px 7px;
+  opacity: 0.18;
+}
+/* Corner squares of fake QR */
+.qr-sq {
+  position: absolute;
+  width: 18px; height: 18px;
+  border: 3px solid #0d2b10;
+}
+.qr-sq-tl { top: 7px; left: 7px; }
+.qr-sq-tr { top: 7px; right: 7px; }
+.qr-sq-bl { bottom: 7px; left: 7px; }
+.qr-sq-center {
+  position: absolute;
+  width: 8px; height: 8px;
+  background: #0d2b10;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.qr-scan-label {
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #3a6b3a;
+  text-align: center;
+  max-width: 88px;
+}
+</style>
+</head>
+<body>
+<div class="poster">
+  <div class="bg-texture"></div>
+  <div class="light-leak"></div>
+  <div class="border-frame"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <!-- Forest Illustration -->
+  <div class="illustration">
+    <svg viewBox="0 0 794 440" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="glowCenter" cx="50%" cy="60%" r="50%">
+          <stop offset="0%" stop-color="rgba(100,220,80,0.22)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <linearGradient id="trunk" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#3d2000"/>
+          <stop offset="50%" stop-color="#5a3010"/>
+          <stop offset="100%" stop-color="#3d2000"/>
+        </linearGradient>
+        <linearGradient id="leaf1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#4caf50"/>
+          <stop offset="100%" stop-color="#1b5e20"/>
+        </linearGradient>
+        <linearGradient id="leaf2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#66bb6a"/>
+          <stop offset="100%" stop-color="#2e7d32"/>
+        </linearGradient>
+        <linearGradient id="leaf3" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#81c784"/>
+          <stop offset="100%" stop-color="#388e3c"/>
+        </linearGradient>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(10,40,12,0)"/>
+          <stop offset="100%" stop-color="rgba(10,40,12,0)"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Background glow -->
+      <ellipse cx="397" cy="300" rx="320" ry="200" fill="url(#glowCenter)"/>
+
+      <!-- Far background trees (dark, distant) -->
+      <ellipse cx="60" cy="370" rx="55" ry="70" fill="#0d2b10" opacity="0.6"/>
+      <rect x="57" y="370" width="6" height="60" fill="#071a0a" opacity="0.6"/>
+      <ellipse cx="150" cy="360" rx="45" ry="60" fill="#0f3312" opacity="0.6"/>
+      <rect x="147" y="360" width="6" height="70" fill="#071a0a" opacity="0.6"/>
+      <ellipse cx="640" cy="360" rx="50" ry="65" fill="#0d2b10" opacity="0.6"/>
+      <rect x="637" y="360" width="6" height="70" fill="#071a0a" opacity="0.6"/>
+      <ellipse cx="730" cy="370" rx="45" ry="58" fill="#0f3312" opacity="0.6"/>
+      <rect x="727" y="370" width="6" height="60" fill="#071a0a" opacity="0.6"/>
+
+      <!-- Mid trees -->
+      <!-- Left mid tree -->
+      <rect x="134" y="260" width="14" height="140" fill="url(#trunk)"/>
+      <ellipse cx="141" cy="230" rx="52" ry="65" fill="url(#leaf1)" opacity="0.85"/>
+      <ellipse cx="115" cy="260" rx="38" ry="45" fill="url(#leaf1)" opacity="0.8"/>
+      <ellipse cx="168" cy="255" rx="36" ry="42" fill="url(#leaf2)" opacity="0.8"/>
+      <ellipse cx="141" cy="200" rx="38" ry="50" fill="url(#leaf2)" opacity="0.9"/>
+
+      <!-- Right mid tree -->
+      <rect x="646" y="260" width="14" height="140" fill="url(#trunk)"/>
+      <ellipse cx="653" cy="225" rx="54" ry="68" fill="url(#leaf1)" opacity="0.85"/>
+      <ellipse cx="625" cy="260" rx="40" ry="46" fill="url(#leaf1)" opacity="0.8"/>
+      <ellipse cx="680" cy="255" rx="38" ry="44" fill="url(#leaf2)" opacity="0.8"/>
+      <ellipse cx="653" cy="198" rx="40" ry="52" fill="url(#leaf2)" opacity="0.9"/>
+
+      <!-- MAIN CENTER TREE — the hero -->
+      <rect x="383" y="200" width="22" height="240" fill="url(#trunk)"/>
+
+      <!-- Roots suggestion -->
+      <path d="M383 390 Q370 400 355 415" stroke="#3d2000" stroke-width="5" fill="none" opacity="0.7"/>
+      <path d="M405 390 Q418 400 433 415" stroke="#3d2000" stroke-width="5" fill="none" opacity="0.7"/>
+      <path d="M390 400 Q385 415 382 430" stroke="#3d2000" stroke-width="4" fill="none" opacity="0.6"/>
+
+      <!-- Branches -->
+      <path d="M390 310 Q340 280 300 250" stroke="#3d2000" stroke-width="8" fill="none"/>
+      <path d="M398 290 Q450 260 490 230" stroke="#3d2000" stroke-width="8" fill="none"/>
+      <path d="M390 340 Q355 325 320 310" stroke="#3d2000" stroke-width="6" fill="none"/>
+      <path d="M398 340 Q435 325 468 310" stroke="#3d2000" stroke-width="6" fill="none"/>
+
+      <!-- Main canopy layers -->
+      <ellipse cx="394" cy="170" rx="100" ry="120" fill="url(#leaf1)" opacity="0.7"/>
+      <ellipse cx="394" cy="155" rx="90" ry="105" fill="url(#leaf2)" opacity="0.85"/>
+      <ellipse cx="360" cy="190" rx="70" ry="80" fill="url(#leaf1)" opacity="0.8"/>
+      <ellipse cx="428" cy="185" rx="72" ry="82" fill="url(#leaf1)" opacity="0.8"/>
+      <ellipse cx="394" cy="130" rx="75" ry="90" fill="url(#leaf3)" opacity="0.9"/>
+      <ellipse cx="365" cy="155" rx="55" ry="65" fill="url(#leaf3)" opacity="0.8"/>
+      <ellipse cx="423" cy="150" rx="58" ry="68" fill="url(#leaf3)" opacity="0.8"/>
+      <!-- Top highlight -->
+      <ellipse cx="394" cy="100" rx="55" ry="65" fill="#a5d6a7" opacity="0.55"/>
+      <ellipse cx="394" cy="85" rx="35" ry="45" fill="#c8e6c9" opacity="0.4"/>
+
+      <!-- Branch leaf clusters -->
+      <ellipse cx="295" cy="240" rx="40" ry="45" fill="url(#leaf2)" opacity="0.85"/>
+      <ellipse cx="275" cy="255" rx="30" ry="35" fill="url(#leaf3)" opacity="0.8"/>
+      <ellipse cx="490" cy="220" rx="42" ry="48" fill="url(#leaf2)" opacity="0.85"/>
+      <ellipse cx="510" cy="238" rx="32" ry="36" fill="url(#leaf3)" opacity="0.8"/>
+
+      <ellipse cx="317" cy="305" rx="32" ry="36" fill="url(#leaf1)" opacity="0.8"/>
+      <ellipse cx="470" cy="302" rx="32" ry="36" fill="url(#leaf1)" opacity="0.8"/>
+
+      <!-- Fireflies / light particles -->
+      <circle cx="270" cy="200" r="2" fill="#c8e6c9" opacity="0.9"/>
+      <circle cx="520" cy="185" r="2.5" fill="#a5d6a7" opacity="0.85"/>
+      <circle cx="230" cy="280" r="1.5" fill="#81c784" opacity="0.8"/>
+      <circle cx="560" cy="270" r="2" fill="#c8e6c9" opacity="0.8"/>
+      <circle cx="350" cy="100" r="1.5" fill="#e8f5e9" opacity="0.7"/>
+      <circle cx="440" cy="95" r="1.5" fill="#e8f5e9" opacity="0.7"/>
+      <circle cx="180" cy="240" r="2" fill="#a5d6a7" opacity="0.75"/>
+      <circle cx="610" cy="250" r="2" fill="#a5d6a7" opacity="0.75"/>
+
+      <!-- Birds silhouette -->
+      <path d="M200 160 Q205 156 210 160 Q215 156 220 160" stroke="#c8e6c9" stroke-width="1.5" fill="none" opacity="0.6"/>
+      <path d="M570 140 Q575 136 580 140 Q585 136 590 140" stroke="#c8e6c9" stroke-width="1.5" fill="none" opacity="0.6"/>
+      <path d="M490 110 Q494 107 498 110 Q502 107 506 110" stroke="#c8e6c9" stroke-width="1.2" fill="none" opacity="0.5"/>
+
+      <!-- Ground / grass -->
+      <ellipse cx="397" cy="428" rx="380" ry="28" fill="#0d2b10" opacity="0.8"/>
+      <ellipse cx="397" cy="430" rx="300" ry="18" fill="#0f3312" opacity="0.6"/>
+
+      <!-- Small seedlings -->
+      <line x1="240" y1="415" x2="240" y2="400" stroke="#4caf50" stroke-width="2"/>
+      <ellipse cx="240" cy="397" rx="8" ry="10" fill="#4caf50" opacity="0.8"/>
+      <line x1="555" y1="415" x2="555" y2="400" stroke="#4caf50" stroke-width="2"/>
+      <ellipse cx="555" cy="397" rx="8" ry="10" fill="#4caf50" opacity="0.8"/>
+      <line x1="320" y1="420" x2="320" y2="408" stroke="#66bb6a" stroke-width="1.5"/>
+      <ellipse cx="320" cy="406" rx="6" ry="7" fill="#66bb6a" opacity="0.7"/>
+      <line x1="475" y1="420" x2="475" y2="408" stroke="#66bb6a" stroke-width="1.5"/>
+      <ellipse cx="475" cy="406" rx="6" ry="7" fill="#66bb6a" opacity="0.7"/>
+    </svg>
+  </div>
+
+  <!-- Title Block -->
+  <div class="title-block">
+    <p class="eyebrow">🌿 Campaña Social · Medio Ambiente 🌿</p>
+    <h1 class="main-title">Reforesta<span class="green">ción</span><br>Urbana</h1>
+    <p class="tagline">Cada árbol cuenta. El futuro es verde.</p>
+    <div class="divider"></div>
+
+    <div class="stats-row">
+      <div class="stat-item">
+        <span class="stat-num">+15M</span>
+        <span class="stat-label">Ha deforestadas / año</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">1 árbol</span>
+        <span class="stat-label">Absorbe 22 kg de CO₂</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">2050</span>
+        <span class="stat-label">Meta de carbono neutro</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Body Text -->
+  <div class="body-text">
+    <p>Los bosques urbanos regulan la temperatura, purifican el aire y mejoran<br>
+    la calidad de vida de millones de personas en todo el mundo.</p>
+    <p style="margin-top:10px; font-size:12px; opacity:0.5;">Plantar un árbol hoy es invertir en el planeta de mañana.</p>
+
+    <div class="chips">
+      <span class="chip">🌱 Planta un árbol</span>
+      <span class="chip">♻️ Reduce tu huella</span>
+      <span class="chip">💧 Cuida el agua</span>
+      <span class="chip">🌍 Actúa hoy</span>
+    </div>
+  </div>
+
+  <!-- Bottom separator -->
+  <div class="sep-line"></div>
+
+  <!-- QR Band -->
+  <div class="qr-band">
+    <div class="qr-text-col">
+      <p class="qr-title">📱 Activa la Realidad Aumentada</p>
+      <p class="qr-desc">Escanea el código QR con tu smartphone y apunta<br>la cámara al póster para ver la experiencia AR.</p>
+      <span class="ar-pill">🔮 AR · NFT Tracking · AR.js</span>
+    </div>
+    <div class="qr-box-wrap">
+      <div>
+        <div class="qr-box" id="qr-container">
+          <div class="qr-sq qr-sq-tl"></div>
+          <div class="qr-sq qr-sq-tr"></div>
+          <div class="qr-sq qr-sq-bl"></div>
+          <div class="qr-sq-center"></div>
+        </div>
+        <p class="qr-scan-label" style="margin-top:5px;">Escanear aquí</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

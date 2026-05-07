@@ -1,0 +1,27 @@
+{
+    "addPath": "",
+    "cameraPara": "brave-leon/data/camera_para.dat",
+    "container": {
+      "create": true,
+      "containerName": "",
+      "canvasName": ""
+    },
+    "videoSettings": {
+      "width":  { "min": 640, "max": 1280 },
+      "height": { "min": 480, "max": 720 },
+      "facingMode": "environment",
+      "targetFrameRate": 30
+    },
+    "loading": {
+      "create": true,
+      "logo": {
+        "src": "data/brave-leon-logo.gif",
+        "alt": "BRAVE LEON"
+      },
+      "loadingMessage": "Apunta la cámara al frente de la tarjeta..."
+    },
+    "stats": {
+      "createHtml": false
+    },
+    "oef": true
+}

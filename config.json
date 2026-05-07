@@ -1,0 +1,19 @@
+{
+  "addPath": "",
+  "interpolationFactor": 24,
+  "maxDetectionRate": 60,
+  "canvasWidth": 640,
+  "canvasHeight": 480,
+  "workers": [
+    {
+      "type": "nft",
+      "nftMarkersParameters": [["nft/poster"]],
+      "markerWidth": 14,
+      "markerHeight": 10,
+      "canvasWidth": 640,
+      "canvasHeight": 480,
+      "patchSize": "patchSize_16",
+      "cameraParamUrl": "camera_para.dat"
+    }
+  ]
+}
