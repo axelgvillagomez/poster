@@ -2,69 +2,186 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Proceso Técnico — Proyecto Final AR</title>
+<title>Bitácora de Proyecto Final — Realidad Aumentada</title>
 <style>
-  body { font-family: 'Inter', -apple-system, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 40px; }
-  h1 { color: #1b5e20; border-bottom: 2px solid #1b5e20; padding-bottom: 10px; }
-  h2 { color: #2e7d32; margin-top: 30px; }
-  .section { margin-bottom: 20px; }
-  .image-container { text-align: center; margin: 20px 0; border: 1px solid #ddd; padding: 10px; background: #f9f9f9; }
-  .image-container img { max-width: 100%; height: auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-  code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; }
-  pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; border-left: 5px solid #2e7d32; }
-  .footer { margin-top: 50px; font-size: 12px; color: #777; text-align: center; border-top: 1px solid #eee; padding-top: 20px; }
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap');
+  
+  body { 
+    font-family: 'Inter', sans-serif; 
+    line-height: 1.7; 
+    color: #2c3e50; 
+    max-width: 900px; 
+    margin: 0 auto; 
+    padding: 60px 40px; 
+    background-color: #fff;
+  }
+
+  header { 
+    text-align: center; 
+    margin-bottom: 60px; 
+    border-bottom: 3px solid #27ae60; 
+    padding-bottom: 20px;
+  }
+
+  h1 { 
+    font-family: 'Playfair Display', serif; 
+    font-size: 36px; 
+    color: #1b5e20; 
+    margin-bottom: 10px;
+  }
+
+  .meta-info { 
+    font-size: 14px; 
+    color: #7f8c8d; 
+    text-transform: uppercase; 
+    letter-spacing: 0.1em;
+  }
+
+  h2 { 
+    font-size: 24px; 
+    color: #2e7d32; 
+    margin-top: 40px; 
+    border-left: 5px solid #27ae60; 
+    padding-left: 15px;
+  }
+
+  p { margin-bottom: 20px; text-align: justify; }
+
+  .poster-preview { 
+    text-align: center; 
+    margin: 40px 0; 
+    background: #f9f9f9; 
+    padding: 20px; 
+    border-radius: 8px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  }
+
+  .poster-preview img { 
+    max-width: 100%; 
+    height: auto; 
+    border: 1px solid #eee;
+  }
+
+  .tech-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px; 
+    margin-top: 20px;
+  }
+
+  .tech-card { 
+    background: #f4fbf6; 
+    padding: 20px; 
+    border-radius: 8px; 
+    border: 1px solid #e0f2f1;
+  }
+
+  .tech-card h3 { 
+    font-size: 16px; 
+    margin-top: 0; 
+    color: #1b5e20;
+  }
+
+  ul { padding-left: 20px; }
+  li { margin-bottom: 10px; }
+
+  code { 
+    background: #f0f0f0; 
+    padding: 2px 6px; 
+    border-radius: 4px; 
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9em;
+  }
+
+  footer { 
+    margin-top: 80px; 
+    text-align: center; 
+    font-size: 12px; 
+    color: #bdc3c7; 
+    border-top: 1px solid #eee; 
+    padding-top: 40px;
+  }
+
+  .watermark {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    opacity: 0.1;
+    font-size: 40px;
+    font-weight: 700;
+    pointer-events: none;
+  }
+
+  @media print {
+    body { padding: 0; }
+    header { margin-bottom: 30px; }
+  }
 </style>
 </head>
 <body>
 
-  <h1>Proyecto Final: Realidad Aumentada (NFT)</h1>
-  <p><strong>Estudiante:</strong> Axel García Villagómez</p>
-  <p><strong>Tema:</strong> Reforestación Urbana (Aspecto Social/Ecológico)</p>
+<header>
+  <h1>PROYECTO FINAL: REALIDAD AUMENTADA NFT</h1>
+  <div class="meta-info">Desarrollo de Experiencias Inmersivas · Mayo 2026</div>
+  <p style="text-align: center; margin-top: 10px; font-weight: 600;">Estudiante: Axel García Villagómez</p>
+</header>
 
-  <div class="section">
-    <h2>1. Descripción del Proyecto</h2>
-    <p>El proyecto consiste en un póster interactivo diseñado para promover la reforestación urbana. Utiliza tecnología de Realidad Aumentada basada en marcadores de Seguimiento de Características Naturales (NFT), permitiendo que cualquier smartphone con navegador web pueda visualizar contenido 3D dinámico al apuntar al póster.</p>
+<section>
+  <h2>1. Justificación y Propósito</h2>
+  <p>El presente proyecto surge de la necesidad de utilizar la Realidad Aumentada (RA) como una herramienta de impacto social. Se ha seleccionado el tema de la <strong>Reforestación Urbana</strong> debido a su relevancia crítica en la mitigación del cambio climático en entornos metropolitanos.</p>
+  <p>El objetivo es transformar un medio estático (un póster) en una ventana informativa dinámica que permita visualizar, a través de video y contenido multimedia, el beneficio directo de la plantación de árboles, logrando una conexión emocional y cognitiva más profunda con el espectador.</p>
+</section>
+
+<section>
+  <h2>2. El Producto: Póster de Concientización</h2>
+  <div class="poster-preview">
+    <img src="poster.jpg" alt="Vista previa del póster final">
+    <p style="font-size: 13px; color: #7f8c8d; margin-top: 15px;"><em>Figura 1: Diseño final del póster con jerarquía visual optimizada y código QR de acceso.</em></p>
   </div>
+</section>
 
-  <div class="section">
-    <h2>2. Imagen del Póster Final</h2>
-    <div class="image-container">
-      <img src="poster.jpg" alt="Póster de Reforestación Urbana">
-      <p><em>Póster final con código QR integrado para acceso directo.</em></p>
+<section>
+  <h2>3. Desarrollo Técnico y Metodología</h2>
+  
+  <h3>A. Diseño Visual del Marcador</h3>
+  <p>El póster fue diseñado bajo principios de <strong>Seguimiento de Características Naturales (NFT)</strong>. Se evitó el uso de marcadores tradicionales (como los de AR.js tipo 'Hero') para ofrecer una estética limpia. El diseño incluye altos niveles de contraste, formas geométricas no repetitivas y detalles finos que sirven como "puntos de interés" para el algoritmo de visión computacional.</p>
+
+  <h3>B. Procesamiento de Imagen (NFT Creator)</h3>
+  <p>Utilizando herramientas de terminal y WebAssembly, la imagen se procesó para extraer descriptores visuales. Este proceso generó tres archivos fundamentales:</p>
+  <ul>
+    <li><code>.fset</code>: Estructura de características de la imagen.</li>
+    <li><code>.fset3</code>: Datos de descriptores espaciales a múltiples escalas.</li>
+    <li><code>.iset</code>: Imagen binaria optimizada para el motor de búsqueda.</li>
+  </ul>
+
+  <h3>C. Arquitectura de la Aplicación Web</h3>
+  <div class="tech-grid">
+    <div class="tech-card">
+      <h3>Visualización 3D</h3>
+      <p>Se implementó <strong>Three.js</strong> para el renderizado de la escena. Se creó un plano con textura de video (<code>VideoTexture</code>) sincronizado con el marcador.</p>
+    </div>
+    <div class="tech-card">
+      <h3>Motor AR</h3>
+      <p>Se integró <strong>ARnft</strong>, una librería ligera de alto rendimiento que permite el seguimiento NFT directamente en navegadores móviles sin necesidad de apps externas.</p>
     </div>
   </div>
+</section>
 
-  <div class="section">
-    <h2>3. Proceso Técnico</h2>
-    <h3>A. Diseño y Generación de Marcadores</h3>
-    <p>Se diseñó un póster de alto contraste con elementos visuales únicos para facilitar el seguimiento (tracking). La imagen fue procesada utilizando la herramienta <code>NFT-Marker-Creator</code> para generar los conjuntos de datos necesarios (<code>.fset</code>, <code>.fset3</code>, <code>.iset</code>).</p>
-    
-    <h3>B. Desarrollo de la App AR</h3>
-    <p>La aplicación utiliza <strong>ARnft</strong> como motor de seguimiento y <strong>Three.js</strong> para el renderizado 3D. Se implementó una escena que incluye:</p>
-    <ul>
-      <li>Un modelo de árbol 3D procedimental (tronco y capas de follaje).</li>
-      <li>Animación de partículas (hojas flotantes) y balanceo suave.</li>
-      <li>Una interfaz de usuario (UI) que indica el estado del marcador y proporciona instrucciones.</li>
-    </ul>
+<section>
+  <h2>4. Resultados y Deployment</h2>
+  <p>La experiencia final permite que cualquier usuario, tras escanear un código QR, acceda a una webapp que activa la cámara. Al detectar el póster, se reproduce un video inmersivo sobre la superficie del mismo, creando un efecto de "póster viviente".</p>
+  <p>El proyecto se encuentra alojado en <strong>GitHub Pages</strong> bajo un entorno seguro (HTTPS), lo que garantiza la compatibilidad con los permisos de cámara de navegadores modernos como Chrome y Safari.</p>
+</section>
 
-    <h3>C. Implementación de QR y Deployment</h3>
-    <p>Se generó un código QR dinámico que apunta a la URL de hosting. El proyecto se encuentra desplegado en <strong>GitHub Pages</strong> para su acceso público instantáneo.</p>
-  </div>
+<section>
+  <h2>5. Conclusión</h2>
+  <p>Este proyecto demuestra que la Realidad Aumentada no es solo un recurso estético, sino una poderosa herramienta narrativa. Al integrar el proceso de diseño gráfico con el desarrollo web y la visión artificial, hemos logrado crear un puente efectivo entre el mundo físico y el digital para una causa social necesaria.</p>
+</section>
 
-  <div class="section">
-    <h2>4. Tecnologías Utilizadas</h2>
-    <ul>
-      <li><strong>HTML5 / CSS3 / JavaScript (ES6+)</strong></li>
-      <li><strong>Three.js</strong>: Renderizado de gráficos 3D.</li>
-      <li><strong>ARnft</strong>: Seguimiento NFT (Natural Feature Tracking).</li>
-      <li><strong>Puppeteer</strong>: Exportación y automatización de activos.</li>
-      <li><strong>GitHub Pages</strong>: Hosting y despliegue continuo.</li>
-    </ul>
-  </div>
-
-  <div class="footer">
-    UNLA - Tecnologías AR/VR | Mayo 2026
-  </div>
+<footer>
+  <p>UNLA - Tecnologías Emergentes | Proyecto de Segunda Evaluación</p>
+  <div class="watermark">AXEL GV</div>
+</footer>
 
 </body>
 </html>
