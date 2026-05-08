@@ -27,7 +27,7 @@ const fs = require("fs");
   await page.goto(`file://${posterPath}`, { waitUntil: "networkidle0", timeout: 15000 });
 
   // Wait for Google Fonts to load
-  await page.waitForTimeout(2000);
+  await new Promise(r => setTimeout(r, 2000));
 
   await page.screenshot({
     path: outputPath,

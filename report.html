@@ -146,8 +146,9 @@
   <h3>A. Diseño Visual del Marcador</h3>
   <p>El póster fue diseñado bajo principios de <strong>Seguimiento de Características Naturales (NFT)</strong>. Se evitó el uso de marcadores tradicionales (como los de AR.js tipo 'Hero') para ofrecer una estética limpia. El diseño incluye altos niveles de contraste, formas geométricas no repetitivas y detalles finos que sirven como "puntos de interés" para el algoritmo de visión computacional.</p>
 
-  <h3>B. Procesamiento de Imagen (NFT Creator)</h3>
-  <p>Utilizando herramientas de terminal y WebAssembly, la imagen se procesó para extraer descriptores visuales. Este proceso generó tres archivos fundamentales:</p>
+  <h3>B. Procesamiento de Imagen y Optimización de Seguimiento</h3>
+  <p>Durante las pruebas iniciales, se detectó que la limpieza estética del póster generaba un bajo nivel de entropía visual, dificultando el reconocimiento por parte del algoritmo NFT. Para solucionar esto, se aplicó una <strong>capa de ruido estocástico</strong> y texturas de micro-detalle (grain overlay) no perceptibles a simple vista pero fundamentales para la extracción de descriptores visuales.</p>
+  <p>Este proceso elevó el nivel de entropía y permitió una detección mucho más robusta y estable en diversas condiciones de iluminación. Posteriormente, se generaron los archivos:</p>
   <ul>
     <li><code>.fset</code>: Estructura de características de la imagen.</li>
     <li><code>.fset3</code>: Datos de descriptores espaciales a múltiples escalas.</li>
